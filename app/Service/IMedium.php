@@ -9,5 +9,6 @@ interface IMedium
 
     public function guessNumber();
 
+    public function checkNumber($userNum);
 
 }

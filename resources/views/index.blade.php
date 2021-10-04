@@ -9,17 +9,6 @@
 </head>
 <body>
 
-<div>
-{{--    @foreach(session('alinur') as $num):--}}
-{{--    {{$num}}--}}
-{{--    @endforeach--}}
-{{--    @if($numbersAlan):--}}
-{{--    @foreach($numbersAlan as $number):--}}
-{{--    <span>{{$number}}</span>--}}
-{{--    @endforeach--}}
-{{--    @endif--}}
-
-</div>
 
 <div class="container mt-5">
     <div class="row">
@@ -39,14 +28,38 @@
                 <tr>
                     <th scope="row">1</th>
                     <td>Экстрасенс Алан</td>
-                    <td id="historyAlan">{{session('alan')}}</td>
-                    <td id="historyTrueAlan"></td>
+                    <td id="historyAlan">  @if(session()->has('alan_numbers'))
+                            @foreach(session('alan_numbers') as $num)
+                                {{$num . ';'}}
+                            @endforeach
+
+                        @endif</td>
+                    <td id="historyTrueAlan">    @if(session()->has('alan_guess_numbers'))
+                            @foreach(session('alan_guess_numbers') as $num)
+                                {{$num . ';'}}
+                            @endforeach
+
+                        @endif</td>
                 </tr>
                 <tr>
                     <th scope="row">2</th>
                     <td>Экстрасенс Джон</td>
-                    <td id="historyJohn">{{session('johnNums')}}</td>
-                    <td id="historyTrueJohn"></td>
+                    <td id="historyJohn">
+                        @if(session()->has('john_numbers'))
+                            @foreach(session('john_numbers') as $num)
+                                {{$num . ';'}}
+                            @endforeach
+
+                        @endif
+                    </td>
+                    <td id="historyTrueJohn">
+                        @if(session()->has('john_guess_numbers'))
+                            @foreach(session('john_guess_numbers') as $num)
+                                {{$num . ';'}}
+                            @endforeach
+
+                        @endif
+                    </td>
                 </tr>
                 </tbody>
             </table>
@@ -62,12 +75,12 @@
                 <tbody>
                 <tr>
                     <td>Пользователь</td>
-
-                    @if(session()->has('user')):
-                        @foreach(session('user') as $userNum):
-                        <td>{{$userNum}}</td>
-                        @endforeach
-                    @endif
+                    <td> @if(session()->has('user_numbers'))
+                        @foreach(session('user_numbers') as $userNum)
+                            {{$userNum . ';'}}
+                            @endforeach
+                            @endif
+                            </td>
 
                 </tr>
                 </tbody>
@@ -124,22 +137,22 @@
 </html>
 
 <script>
-    $('#submit').on('click', function (e) {
-        e.preventDefault()
-        let id = $('input[name="number"]').val()
-
-        $.ajax({
-            headers: {'X-CSRF-TOKEN': $('input[name="_token"]').val()},
-            url: 'test',
-            data: {
-                id: id,
-            },
-            method: 'POST'
-        }).done(function (d) {
-            let date = JSON.parse(d)
-            $('#historyAlan').append(date.alanNum)
-            $('#historyJohn').append(date.johnNum)
-
-        })
-    })
+    // $('#submit').on('click', function (e) {
+    //     e.preventDefault()
+    //     let number = $('input[name="number"]').val()
+    //
+    //     $.ajax({
+    //         headers: {'X-CSRF-TOKEN': $('input[name="_token"]').val()},
+    //         url: 'test',
+    //         data: {
+    //             number: number,
+    //         },
+    //         method: 'POST'
+    //     }).done(function (d) {
+    //         let date = JSON.parse(d)
+    //         //$('#historyAlan').append(date.alanNum)
+    //         //$('#historyJohn').append(date.johnNum)
+    //
+    //     })
+    // })
 </script>

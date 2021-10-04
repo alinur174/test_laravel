@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Service\AlanMedium;
-use App\Service\JohnMedium;
+use App\Service\AlanMediumService;
+use App\Service\JohnMediumService;
+use App\Service\UserService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
@@ -11,103 +12,40 @@ use Illuminate\Support\Facades\Session;
 class MainController extends Controller
 {
 
-    public static $array;
+    public static $array = [];
 
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(AlanMedium $alanMedium)
+    public function index(AlanMediumService $alanMedium)
     {
 
-
-        $numbersAlan = AlanMedium::$numbers;
-
-        return view('index', compact('numbersAlan'));
+        return view('index');
 
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+
+
+    public function store(Request $request, AlanMediumService $alanMedium, JohnMediumService $johnMedium, UserService $userService)
     {
-        //
-    }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request, AlanMedium $alanMedium, JohnMedium $johnMedium)
-    {
-        $cart = Session::get('cart.program');
+        $userNum = $request->number;
 
-        session(['cart', rand(1,80)]);
+        $alanMedium->guessNumber();
+        $johnMedium->guessNumber();
+        $userService->getNumber($userNum);
 
-        $array = session('cart');
-        if (empty($array)){
-            $array = [];
-        }
+        $alanMedium->checkNumber($userNum);
+        $johnMedium->checkNumber($userNum);
 
-        $array[] = rand(1,52);
-        session()->push('cart', $array);
 
-        dd(session()->all());
-        $alanNum = $alanMedium->guessNumber();
-        $johnNum = $johnMedium->guessNumber();
-
-        echo json_encode(['alanNum' => $alanNum, 'johnNum' => $johnNum, 'user' => 2]);
+        return redirect()->back();
 
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
 }
